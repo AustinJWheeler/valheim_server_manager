@@ -1,5 +1,5 @@
 const express = require('express');
-const { exec } = require('child_process');
+const { execSync } = require('child_process');
 const app = express();
 
 const parse_logs = (logs) => logs.split('\n').filter(x => x.slice(16, 41) === 'raptor start_my_server.sh').map(x => ({
