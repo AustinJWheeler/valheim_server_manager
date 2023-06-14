@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Reboot Server</title>
+</head>
+<body>
+  <button id="rebootBtn">Reboot Server</button>
+  <p id="status">Server is running.</p>
+  <script>
+    const statusText = document.getElementById('status');
+
+    async function checkServerStatus() {
+      try {
+        const response = await fetch('/status');
+        if (response.status === 200) {
+          statusText.textContent = 'Server is running.';
+        } else {
+          statusText.textContent = 'Server is not running.';
+        }
+      } catch (error) {
+        statusText.textContent = 'Server is not running.';
+      }
+    }
+
+    document.getElementById('rebootBtn').addEventListener('click', async () => {
+      const response = await fetch('/reboot', { method: 'POST' });
+      if (response.ok) {
+        statusText.textContent = 'Rebooting server...';
+      } else {
+        statusText.textContent = 'Failed to reboot the server.';
+      }
+    });
+
+    setInterval(checkServerStatus, 3000);
+  </script>
+</body>
+</html>
