@@ -236,10 +236,11 @@
   </div>
 
   <script>
-    function hideAllStatus() {
+    function hideAllStatus(hideLogs = true) {
       document.getElementById('serverRunning').style.display = 'none';
       document.getElementById('serverNotRunning').style.display = 'none';
       document.getElementById('rebootingServer').style.display = 'none';
+      if (!hideLogs) return;
       document.getElementById('players-online').textContent = '';
       document.getElementById('join-code').textContent = '';
       document.getElementById('last-login').textContent = '';
@@ -259,7 +260,7 @@
     async function checkServerStatus() {
       try {
         const response = await fetch('/status');
-        hideAllStatus();
+        hideAllStatus(false);
         if (response.status === 200) {
           document.getElementById('serverRunning').style.display = 'block';
 
