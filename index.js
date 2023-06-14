@@ -2,6 +2,8 @@ const express = require('express');
 const { execSync, exec } = require('child_process');
 const app = express();
 
+app.use(express.static('public'));
+
 const parse_logs = (logs) => logs.split('\n').filter(x => x.slice(16, 41) === 'raptor start_my_server.sh').map(x => ({
   message: x.slice(69),
   date_time: new Date(Date.UTC(

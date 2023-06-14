@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
+<link rel="icon" id="favicon" href="0.png">
 
 <head>
-  <title>Reboot Server</title>
+  <title>Valheim Server</title>
   <style>
     body {
       font-family: sans-serif;
@@ -166,10 +167,6 @@
       padding: 3rem;
     }
 
-    .max-w-[48em] {
-      max-width: 48em;
-    }
-
     .w-full {
       width: 100%;
     }
@@ -222,11 +219,11 @@
       <p id="rebootingServer" style="display: none;"
         class="inline-block rounded bg-amber-500 px-3 py-1 text-sm font-medium text-white">Rebooting</p>
 
-        <p id="players-online" class="py-1"></p>
-        <p id="join-code" class="py-1"></p>
-        <p id="last-login" class="py-1"></p>
+      <p id="players-online" class="py-1"></p>
+      <p id="join-code" class="py-1"></p>
+      <p id="last-login" class="py-1"></p>
 
-        <p id="logs" class="py-2 w-med font-light">
+      <p id="logs" class="py-2 w-med font-light">
     </div>
   </div>
 
@@ -250,6 +247,9 @@
       document.getElementById('last-login').textContent = logs.last_login ? 'last login ' + Math.trunc(logs.last_login) + ' hours ago' : '';
 
       document.getElementById('logs').innerHTML = logs.all.map(x => x.raw).join('<br>\n')
+
+      const favicon = document.getElementById('favicon');
+      favicon.href = `${Math.min(logs.players_online, 4)}.png`;
     }
 
     async function checkServerStatus() {
