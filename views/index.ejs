@@ -252,7 +252,7 @@
 
       document.getElementById('players-online').textContent = '' + logs.players_online + ' player(s) currently online'
       document.getElementById('join-code').textContent = 'join code: ' + logs.join_code
-      document.getElementById('last-login').textContent = logs.last_login ? 'last login ' + logs.last_login.trunc() + ' hours ago' : '';
+      document.getElementById('last-login').textContent = logs.last_login ? 'last login ' + Math.trunc(logs.last_login) + ' hours ago' : '';
 
       document.getElementById('logs').textContent = logs.all.map(x => x.raw).join('<br>\n')
     }
@@ -261,7 +261,7 @@
       try {
         const response = await fetch('/status');
         hideAllStatus(false);
-        if (response.status === 200 || response.status === 304) {
+        if (response.status === 200) {
           document.getElementById('serverRunning').style.display = 'block';
 
           await fetchLogs()
@@ -269,6 +269,7 @@
           document.getElementById('serverNotRunning').style.display = 'block';
         }
       } catch (error) {
+        console.log(error);
         hideAllStatus();
         document.getElementById('serverNotRunning').style.display = 'block';
       }
