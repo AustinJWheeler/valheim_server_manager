@@ -18,7 +18,7 @@ const parse_logs = (logs) => logs.split('\n').filter(x => x.slice(16, 41) === 'r
 })).reverse()
 
 const getLogs = () => {
-  const raw = execSync('journalctl -u valheim -n 200 --no-pager').toString()
+  const raw = execSync('journalctl -u valheim -n 1000 --no-pager').toString()
   const all = parse_logs(raw)
 
   const players_online = all
