@@ -22,13 +22,22 @@ const getLogs = () => {
   const all = parse_logs(raw)
 
   const players_online = all
-    .filter(x => x.message.slice(0,13) === ' Connections ' && x.date_time > new Date((Date.now()) - 11 * 60 * 1000))
-    .map(x => parseInt(x.message.slice(13, 15).trim()))
+    .filter(x => x.date_time > new Date((Date.now()) - 11 * 60 * 1000))
+    .map(x => {
+      if (x.message.slice(0, 13) === ' Connections ')
+        return parseInt(x.message.slice(13, 15).trim())
+      if (x.message.slice(0, 49) === 'Player joined server "Raptor" that has join code ')
+        return parseInt(x.message.slice(61, 63).trim())
+      if (x.message.slice(0, 58) === 'Player connection lost server "Raptor" that has join code ')
+        return parseInt(x.message.slice(70, 72).trim())
+      return null;
+    })
+    .filter(x => x !== null)
     .slice(0, 1)
     .reduce((a, b) => a + b, 0)
 
   const last = all
-    .filter(x => x.message.slice(0,49) === 'Player joined server "Raptor" that has join code ')
+    .filter(x => x.message.slice(0, 49) === 'Player joined server "Raptor" that has join code ')
     .slice(0, 1)
 
   const last_login = last.map(x => ((Date.now()) - x.date_time.getTime()) / (60 * 60 * 1000)).reduce((a, b) => a + b, 0)
