@@ -4,18 +4,38 @@ const app = express();
 
 app.use(express.static('public'));
 
-const parse_logs = (logs) => logs.split('\n').filter(x => x.slice(16, 41) === 'raptor start_my_server.sh').map(x => ({
-  message: x.slice(69),
-  date_time: new Date(Date.UTC(
-    x.slice(54, 58),
-    x.slice(48, 50) - 1,
-    x.slice(51, 53),
-    x.slice(59, 61),
-    x.slice(62, 64),
-    x.slice(65, 67),
-  )),
-  raw: x.slice(48),
-})).reverse()
+const findData = (str) => {
+  let count = 0;
+  let index = -1;
+
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === ":") {
+      count++;
+      if (count === 3) {
+        index = i;
+        break;
+      }
+    }
+  }
+
+  return index + 2;
+};
+
+const parse_logs = (logs) => logs.split('\n').filter(x => x.slice(16, 41) === 'raptor start_my_server.sh').map(x => {
+  const ds = findData(x)
+  return {
+    message: x.slice(69),
+    date_time: new Date(Date.UTC(
+      x.slice(ds + 6, ds + 10),
+      x.slice(ds + 0, ds + 2) - 1,
+      x.slice(ds + 3, ds + 5),
+      x.slice(ds + 11, ds + 13),
+      x.slice(ds + 14, ds + 16),
+      x.slice(ds + 17, ds + 19),
+    )),
+    raw: x.slice(ds),
+  }
+}).reverse()
 
 const getLogs = () => {
   const raw = execSync('journalctl -u valheim -n 1000 --no-pager').toString()
