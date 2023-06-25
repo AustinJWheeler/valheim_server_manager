@@ -24,7 +24,7 @@ const findData = (str) => {
 const parse_logs = (logs) => logs.split('\n').filter(x => x.slice(16, 41) === 'raptor start_my_server.sh').map(x => {
   const ds = findData(x)
   return {
-    message: x.slice(69),
+    message: x.slice(ds + 21),
     date_time: new Date(Date.UTC(
       x.slice(ds + 6, ds + 10),
       x.slice(ds + 0, ds + 2) - 1,
